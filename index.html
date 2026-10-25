@@ -153,6 +153,7 @@ section.block .wrap { padding-block: 84px; }
 .card .top svg { width: 40px; height: 40px; color: var(--accent); flex: none; }
 .card .ver { font: 500 13px/1.4 var(--f-mono); color: var(--muted); }
 .card ol { margin: 0; padding-left: 20px; color: var(--ink-2); font-size: 15px; display: grid; gap: 6px; }
+.guide-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 .note { margin-top: 20px; font-size: 14.5px; color: var(--ink-2); background: var(--accent-soft); border-radius: 12px; padding: 14px 18px; }
 @media (max-width: 760px) { .dl { grid-template-columns: 1fr; } }
 
@@ -190,6 +191,7 @@ footer a { color: var(--ink-2); }
     <nav class="nav-links" aria-label="Menu">
       <a href="#fitur">Fitur</a>
       <a href="#dua-hp">Dua HP</a>
+      <a href="panduan.html">Cara pasang</a>
       <a href="#tanya">Tanya jawab</a>
     </nav>
     <a class="btn primary sm" href="#unduh">Unduh gratis</a>
@@ -311,16 +313,18 @@ footer a { color: var(--ink-2); }
       <div class="dl">
         <div class="card">
           <div class="top"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 9.4 19.3 6.3a.4.4 0 0 0-.7-.4l-1.8 3.2a10.9 10.9 0 0 0-9.6 0L5.4 5.9a.4.4 0 0 0-.7.4l1.8 3.1A10.3 10.3 0 0 0 1.5 17.5h21a10.3 10.3 0 0 0-5-8.1zM7 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg><div><h3>Android</h3><p class="ver">Tokopilo.apk · Android 7.0 ke atas</p></div></div>
-          <a class="btn primary" id="dl-android" href="https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo.apk">Unduh untuk Android</a>
+          <a class="btn primary" id="dl-android" href="https://github.com/hopilo25/tokopilo/releases/latest/download/Tokopilo.apk">Unduh untuk Android</a>
           <ol>
             <li>Buka file APK yang terunduh, pilih <b>Instal</b>.</li>
-            <li>Kalau diminta, izinkan <b>Instal aplikasi tidak dikenal</b> untuk browser atau WhatsApp.</li>
+            <li>Kalau diminta, izinkan <b>Instal aplikasi tidak dikenal</b> untuk browser atau File Saya.</li>
+            <li>Muncul Play Protect? Ketuk <b>Detail lainnya</b> lalu <b>Tetap instal</b>.</li>
+            <li>HP Samsung: matikan dulu <b>Pemblokir Otomatis</b> di Pengaturan → Keamanan dan privasi.</li>
             <li>Untuk update, pasang di atas aplikasi lama. Jangan dihapus dulu.</li>
           </ol>
         </div>
         <div class="card">
           <div class="top"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.4 4.5v7H3zM11.4 4.4 21 3v8.5h-9.6zM3 12.5h7.4v7L3 18.5zM11.4 12.5H21V21l-9.6-1.4z"/></svg><div><h3>Windows</h3><p class="ver">Pemasang .exe · Windows 10 &amp; 11 (64-bit)</p></div></div>
-          <a class="btn primary" id="dl-windows" href="https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo-Setup.exe">Unduh untuk Windows</a>
+          <a class="btn primary" id="dl-windows" href="https://github.com/hopilo25/tokopilo/releases/latest/download/Tokopilo-Setup.exe">Unduh untuk Windows</a>
           <ol>
             <li>Jalankan file pemasang yang terunduh.</li>
             <li>Kalau muncul "Windows melindungi PC Anda", klik <b>Info selengkapnya</b> lalu <b>Tetap jalankan</b>.</li>
@@ -329,6 +333,10 @@ footer a { color: var(--ink-2); }
         </div>
       </div>
       <p class="note">Peringatan saat memasang muncul karena Tokopilo dibagikan langsung, bukan lewat Play Store atau Microsoft Store. Tokopilo tidak mengirim data tokomu ke mana pun.</p>
+      <div class="guide-links">
+        <a class="btn ghost" href="panduan.html">Lihat panduan bergambar</a>
+        <a class="btn ghost" href="https://github.com/hopilo25/tokopilo/releases/latest/download/Cara-Instal-dan-Pakai-Tokopilo.pdf">Unduh panduan PDF</a>
+      </div>
     </div>
   </section>
 
@@ -365,6 +373,7 @@ footer a { color: var(--ink-2); }
       <span>Tokopilo · aplikasi kasir gratis</span>
     </div>
     <nav aria-label="Tautan bawah">
+      <a href="panduan.html">Cara pasang</a>
       <a href="privasi.html">Kebijakan privasi</a>
       <a href="#unduh">Unduh</a>
       <a href="https://trakteer.id/mohamat-agung-nugroho-xgjd" target="_blank" rel="noopener">Trakteer</a>
