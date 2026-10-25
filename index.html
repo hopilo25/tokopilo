@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tokopilo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Tokopilo: aplikasi kasir dan stok gratis untuk warung dan toko. Tanpa langganan, bisa tanpa internet, cetak struk ke printer thermal, kirim nota ke WhatsApp. Untuk Android dan Windows.">
+<link rel="icon" href="img/tokopilo-ikon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Tata letak: kolom tunggal 1120px; hero dua kolom (teks | HP + struk thermal), lalu pita fitur, galeri layar, unduh, tanya-jawab. */
+:root {
+  --bg: #f6f5fb;
+  --surface: #ffffff;
+  --ink: #1b1440;
+  --ink-2: #4b4570;
+  --muted: #7d779c;
+  --line: #e3e0ef;
+  --accent: #6c4cf5;
+  --accent-ink: #ffffff;
+  --accent-soft: #ece7ff;
+  --paper: #fffdf7;
+  --paper-ink: #2a2a2a;
+  --ok: #0f8a5f;
+  --wa: #128c4a;
+  --band: #1b1440;
+  --band-ink: #ece9ff;
+  --band-muted: #a9a3cc;
+  --f-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+  --f-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #110d26; --surface: #1a1536; --ink: #f1eeff; --ink-2: #c9c3e8; --muted: #9690b8; --line: #2e2853;
+    --accent: #9b85ff; --accent-ink: #120c2b; --accent-soft: #2a2257; --paper: #f4f1e6; --paper-ink: #222;
+    --ok: #45d39b; --wa: #4fd889; --band: #0b081b; --band-ink: #ece9ff; --band-muted: #a9a3cc; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #110d26; --surface: #1a1536; --ink: #f1eeff; --ink-2: #c9c3e8; --muted: #9690b8; --line: #2e2853;
+  --accent: #9b85ff; --accent-ink: #120c2b; --accent-soft: #2a2257; --paper: #f4f1e6; --paper-ink: #222;
+  --ok: #45d39b; --wa: #4fd889; --band: #0b081b; --band-ink: #ece9ff; --band-muted: #a9a3cc; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; }
+h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0; }
+.eyebrow { font: 700 12.5px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.lead { font-size: 18px; color: var(--ink-2); max-width: 60ch; }
+
+/* ---------- navigasi */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 24px; padding-block: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 800 20px/1 var(--f-display); letter-spacing: -0.02em; }
+.brand img { width: 34px; height: 34px; border-radius: 9px; }
+.nav-links { display: flex; gap: 22px; margin-left: auto; }
+.nav-links a { color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 15px; }
+.nav-links a:hover { color: var(--accent); }
+.btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 16px/1 var(--f-body); padding: 15px 22px; border-radius: 12px; border: 1.5px solid transparent; cursor: pointer; transition: transform .15s ease, background .15s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn.sm { padding: 10px 16px; font-size: 14.5px; border-radius: 10px; }
+.btn small { display: block; font-weight: 500; font-size: 12.5px; opacity: .8; margin-top: 4px; }
+.btn svg { width: 22px; height: 22px; flex: none; }
+@media (max-width: 760px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+
+/* ---------- hero */
+.hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding-block: 64px 72px; }
+.hero h1 { font-size: clamp(40px, 6.2vw, 72px); font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { margin-top: 20px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 26px 0 0; padding: 0; list-style: none; font-size: 14.5px; color: var(--ink-2); font-weight: 600; }
+.facts li { display: flex; align-items: center; gap: 7px; }
+.facts li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+.stage { position: relative; display: flex; justify-content: center; min-width: 0; }
+.phone { width: min(300px, 70vw); border-radius: 34px; padding: 9px; background: #15102e; box-shadow: 0 30px 60px -20px rgba(27, 20, 64, .45); position: relative; z-index: 1; }
+.phone img { border-radius: 26px; }
+.receipt { position: absolute; right: max(0px, calc(50% - 280px)); bottom: -26px; z-index: 2; width: 196px; background: var(--paper); color: var(--paper-ink); font: 500 10.5px/1.55 var(--f-mono); padding: 16px 14px 22px; box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .45); transform: rotate(4deg);
+  -webkit-mask: radial-gradient(circle 5px at 7px 100%, transparent 98%, #000) 0 0 / 14px 100% repeat-x;
+          mask: radial-gradient(circle 5px at 7px 100%, transparent 98%, #000) 0 0 / 14px 100% repeat-x; }
+.receipt b { font-weight: 700; }
+.receipt .c { text-align: center; }
+.receipt .r { display: flex; justify-content: space-between; gap: 8px; }
+.receipt hr { border: 0; border-top: 1px dashed #999; margin: 6px 0; }
+@media (max-width: 900px) {
+  .hero .wrap { grid-template-columns: 1fr; padding-block: 40px 64px; gap: 40px; }
+  .receipt { right: 2%; width: 168px; font-size: 9.5px; }
+}
+@media (max-width: 420px) { .receipt { display: none; } }
+
+/* ---------- pita fakta */
+.strip { background: var(--band); color: var(--band-ink); }
+.strip .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-block: 34px; }
+.strip b { display: block; font: 800 30px/1 var(--f-display); letter-spacing: -0.02em; }
+.strip span { color: var(--band-muted); font-size: 14.5px; }
+@media (max-width: 760px) { .strip .wrap { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- fitur */
+section.block .wrap { padding-block: 84px; }
+.head { display: grid; gap: 14px; margin-bottom: 40px; }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.feat { background: var(--surface); padding: 26px 24px 28px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.feat .ico { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.feat .ico svg { width: 22px; height: 22px; }
+.feat p { color: var(--ink-2); font-size: 15px; }
+@media (max-width: 900px) { .features { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+
+/* ---------- galeri layar */
+.shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.shot { display: grid; gap: 12px; margin: 0; min-width: 0; }
+.shot .frame { border-radius: 22px; padding: 6px; background: #15102e; }
+.shot .frame img { border-radius: 17px; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; width: 100%; }
+.shot figcaption { font-size: 14.5px; color: var(--ink-2); }
+.shot figcaption b { color: var(--ink); display: block; font-size: 15.5px; }
+.pc { margin-top: 40px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 50px -28px rgba(27, 20, 64, .35); background: var(--surface); }
+.pc .bar { display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+.pc .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
+@media (max-width: 900px) { .shots { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- dua HP */
+.duo { background: var(--surface); border-block: 1px solid var(--line); }
+.duo .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.steps { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 18px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; counter-increment: s; }
+.steps li::before { content: counter(s); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 800 16px/1 var(--f-display); }
+.steps p { color: var(--ink-2); font-size: 15px; }
+.duo-img { display: flex; gap: 16px; justify-content: center; }
+.duo-img .frame { width: 46%; max-width: 240px; border-radius: 24px; padding: 6px; background: #15102e; }
+.duo-img .frame:last-child { margin-top: 48px; }
+.duo-img img { border-radius: 19px; }
+@media (max-width: 900px) { .duo .wrap { grid-template-columns: 1fr; } }
+
+/* ---------- unduh */
+.dl { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+.card .top { display: flex; align-items: center; gap: 14px; }
+.card .top svg { width: 40px; height: 40px; color: var(--accent); flex: none; }
+.card .ver { font: 500 13px/1.4 var(--f-mono); color: var(--muted); }
+.card ol { margin: 0; padding-left: 20px; color: var(--ink-2); font-size: 15px; display: grid; gap: 6px; }
+.note { margin-top: 20px; font-size: 14.5px; color: var(--ink-2); background: var(--accent-soft); border-radius: 12px; padding: 14px 18px; }
+@media (max-width: 760px) { .dl { grid-template-columns: 1fr; } }
+
+/* ---------- tanya jawab */
+.faq { display: grid; gap: 10px; max-width: 820px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px; }
+.faq summary { cursor: pointer; font-weight: 700; padding: 14px 0; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 600 22px/1 var(--f-display); color: var(--accent); }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { color: var(--ink-2); padding-bottom: 16px; font-size: 15.5px; }
+
+/* ---------- dukung & kaki */
+.support { background: var(--band); color: var(--band-ink); }
+.support .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; padding-block: 56px; }
+.support p { color: var(--band-muted); max-width: 56ch; margin-top: 10px; }
+.support .btn.primary { background: #f9a11c; color: #241a05; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; padding-block: 34px; color: var(--muted); font-size: 14px; }
+footer .hp { display: flex; align-items: center; gap: 12px; }
+footer .hp img { height: 26px; width: auto; }
+.logo-dark { display: block; }
+.logo-light { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo-dark { display: none; } :root:not([data-theme="light"]) .logo-light { display: block; } }
+:root[data-theme="dark"] .logo-dark { display: none; }
+:root[data-theme="dark"] .logo-light { display: block; }
+footer nav { display: flex; gap: 20px; }
+footer a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/tokopilo-ikon.png" alt="">Tokopilo</a>
+    <nav class="nav-links" aria-label="Menu">
+      <a href="#fitur">Fitur</a>
+      <a href="#dua-hp">Dua HP</a>
+      <a href="#tanya">Tanya jawab</a>
+    </nav>
+    <a class="btn primary sm" href="#unduh">Unduh gratis</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Aplikasi kasir dari hopilo</p>
+        <h1 style="margin-top:14px">Kasir untuk warung dan toko. <em>Gratis</em>, tanpa langganan.</h1>
+        <p class="lead">Catat penjualan, cetak struk ke printer thermal, kirim nota ke WhatsApp, dan pantau stok. Semua data tersimpan di HP atau komputermu sendiri, dan tetap jalan walau internet mati.</p>
+        <div class="cta">
+          <a class="btn primary" href="#unduh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span>Unduh Tokopilo<small>Android &amp; Windows</small></span></a>
+          <a class="btn ghost" href="#fitur">Lihat fitur</a>
+        </div>
+        <ul class="facts">
+          <li>Gratis selamanya</li>
+          <li>Bisa tanpa internet</li>
+          <li>Data di perangkatmu</li>
+        </ul>
+      </div>
+      <div class="stage">
+        <div class="phone"><img src="img/hp-kasir.webp" alt="Layar Kasir Tokopilo di HP Android: daftar barang dengan harga dan stok" width="780" height="1688"></div>
+        <div class="receipt" aria-hidden="true">
+          <div class="c"><b style="font-size:13px">TOKO BERKAH JAYA</b><br>Jl. Pahlawan No. 12</div>
+          <hr>
+          TRX-20261023-0009<br>23/10/2026 11:51
+          <hr>
+          Beras Premium 5 kg
+          <div class="r"><span>&nbsp;1 krg x 76.000</span><span>76.000</span></div>
+          Minyak Goreng 1 L
+          <div class="r"><span>&nbsp;2 btl x 19.000</span><span>38.000</span></div>
+          Aqua 600 ml
+          <div class="r"><span>&nbsp;1 btl x 3.500</span><span>3.500</span></div>
+          <hr>
+          <div class="r"><b>TOTAL</b><b>117.500</b></div>
+          <div class="r"><span>Bayar (Tunai)</span><span>117.500</span></div>
+          <hr>
+          <div class="c">Terima kasih</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Ringkas">
+    <div class="wrap">
+      <div><b>Rp 0</b><span>tanpa biaya bulanan</span></div>
+      <div><b>44–112 mm</b><span>printer thermal, atau ukuran sendiri</span></div>
+      <div><b>2 HP</b><span>berjualan bersama lewat WiFi</span></div>
+      <div><b>Offline</b><span>tidak butuh internet untuk berjualan</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="fitur">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Fitur</p>
+        <h2>Semua yang dipakai kasir sehari-hari</h2>
+        <p class="lead">Dibuat dari kebutuhan toko sungguhan: banyak satuan, harga ecer dan grosir, pelanggan yang ngutang, dan printer struk yang murah.</p>
+      </div>
+      <div class="features">
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 11h11L21 8H6.2"/></svg></div><h3>Kasir cepat</h3><p>Cari nama atau scan barcode, pilih satuan (pcs, pack, dus) dan harga ecer atau grosir. Kembalian dihitung otomatis.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><path d="M6 14h12v7H6z"/></svg></div><h3>Cetak struk</h3><p>Langsung ke printer thermal 44 sampai 112 mm, atau isi ukuran sendiri, lewat Bluetooth (HP) atau USB (komputer). Bisa pakai logo toko.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 21l2.1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg></div><h3>Nota ke WhatsApp</h3><p>Setelah transaksi, WhatsApp terbuka dengan gambar nota. Tinggal pilih kontak pelanggan, tidak perlu mengetik nomor.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></div><h3>Buku utang</h3><p>Catat kasbon pelanggan, terima uang muka dan cicilan, lalu tagih lewat WhatsApp dengan rincian lengkap.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Rekap &amp; tutup kasir</h3><p>Omzet, laba kotor, barang terlaris, dan setoran per metode bayar (tunai, QRIS, transfer). Ekspor ke Excel.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><h3>Stok &amp; barang</h3><p>Stok berkurang otomatis setiap terjual, peringatan stok menipis, riwayat keluar-masuk barang, impor dari Excel.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>PIN pemilik</h3><p>Karyawan tetap bisa berjualan, tapi laba, harga modal, ubah harga, dan pengaturan butuh PIN pemilik.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Cadangan otomatis</h3><p>Data dicadangkan setiap hari. Di komputer bisa diarahkan ke Google Drive atau OneDrive.</p></div>
+        <div class="feat"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M15 8v8M18 8v8"/></svg></div><h3>Cetak resi</h3><p>Untuk yang juga jualan online: resi PDF dari marketplace dirapikan lalu dicetak ke printer thermal.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="layar" style="padding-top:0">
+    <div class="wrap" style="padding-top:0">
+      <div class="head">
+        <p class="eyebrow">Tampilan</p>
+        <h2>Sama mudahnya di HP dan komputer</h2>
+      </div>
+      <div class="shots">
+        <figure class="shot"><div class="frame"><img src="img/hp-bayar.webp" alt="Jendela pembayaran dengan metode Tunai, QRIS, Transfer, Utang" width="780" height="1688"></div><figcaption><b>Bayar</b>Tunai, QRIS, transfer, atau utang.</figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/hp-struk.webp" alt="Transaksi tersimpan dengan pratinjau struk" width="780" height="1688"></div><figcaption><b>Struk</b>Cetak, atau kirim gambarnya ke WhatsApp.</figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/hp-riwayat.webp" alt="Riwayat penjualan dengan omzet, laba, dan rekap per metode bayar" width="780" height="1688"></div><figcaption><b>Riwayat</b>Omzet dan laba hari ini sekali lihat.</figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/hp-utang.webp" alt="Daftar utang pelanggan" width="780" height="1688"></div><figcaption><b>Utang</b>Siapa yang belum bayar dan berapa.</figcaption></figure>
+      </div>
+      <div class="pc"><div class="bar"><i></i><i></i><i></i></div><img src="img/pc-kasir.webp" alt="Tokopilo di komputer Windows: daftar barang dan keranjang belanja" width="1600" height="955"></div>
+    </div>
+  </section>
+
+  <section class="block duo" id="dua-hp">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Baru di versi 1.5</p>
+        <h2 style="margin-top:12px">Dua HP, satu data toko</h2>
+        <p class="lead" style="margin-top:16px">Satu HP jadi induk yang menyimpan data, HP lain jadi kasir. Stok, harga, dan penjualan langsung sama di keduanya. Cukup WiFi atau hotspot yang sama, tidak perlu internet.</p>
+        <ol class="steps">
+          <li><div><h3>Jadikan HP utama sebagai induk</h3><p>Pengaturan → Dua HP → Jadikan HP ini induk. Muncul kode sambung 6 angka.</p></div></li>
+          <li><div><h3>Sambungkan HP kasir</h3><p>HP induk ketemu otomatis di WiFi yang sama. Masukkan kodenya, selesai.</p></div></li>
+          <li><div><h3>WiFi putus? Tetap jualan</h3><p>Penjualan disimpan di HP kasir dan dikirim sendiri begitu tersambung lagi.</p></div></li>
+        </ol>
+      </div>
+      <div class="duo-img">
+        <div class="frame"><img src="img/hp-duahp.webp" alt="Pengaturan Dua HP di HP induk: alamat, kode sambung, dan HP kasir yang tersambung" width="780" height="1688"></div>
+        <div class="frame"><img src="img/hp-kasir.webp" alt="HP kasir memakai daftar barang dari HP induk" width="780" height="1688"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="unduh">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Unduh</p>
+        <h2>Pasang Tokopilo, gratis</h2>
+        <p class="lead">Versi terbaru 1.5.1. Data toko tetap aman saat memasang versi baru di atas versi lama.</p>
+      </div>
+      <div class="dl">
+        <div class="card">
+          <div class="top"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 9.4 19.3 6.3a.4.4 0 0 0-.7-.4l-1.8 3.2a10.9 10.9 0 0 0-9.6 0L5.4 5.9a.4.4 0 0 0-.7.4l1.8 3.1A10.3 10.3 0 0 0 1.5 17.5h21a10.3 10.3 0 0 0-5-8.1zM7 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg><div><h3>Android</h3><p class="ver">Tokopilo.apk · Android 7.0 ke atas</p></div></div>
+          <a class="btn primary" id="dl-android" href="https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo.apk">Unduh untuk Android</a>
+          <ol>
+            <li>Buka file APK yang terunduh, pilih <b>Instal</b>.</li>
+            <li>Kalau diminta, izinkan <b>Instal aplikasi tidak dikenal</b> untuk browser atau WhatsApp.</li>
+            <li>Untuk update, pasang di atas aplikasi lama. Jangan dihapus dulu.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <div class="top"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.4 4.5v7H3zM11.4 4.4 21 3v8.5h-9.6zM3 12.5h7.4v7L3 18.5zM11.4 12.5H21V21l-9.6-1.4z"/></svg><div><h3>Windows</h3><p class="ver">Pemasang .exe · Windows 10 &amp; 11 (64-bit)</p></div></div>
+          <a class="btn primary" id="dl-windows" href="https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo-Setup.exe">Unduh untuk Windows</a>
+          <ol>
+            <li>Jalankan file pemasang yang terunduh.</li>
+            <li>Kalau muncul "Windows melindungi PC Anda", klik <b>Info selengkapnya</b> lalu <b>Tetap jalankan</b>.</li>
+            <li>Tokopilo muncul di menu Start dan desktop.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="note">Peringatan saat memasang muncul karena Tokopilo dibagikan langsung, bukan lewat Play Store atau Microsoft Store. Tokopilo tidak mengirim data tokomu ke mana pun.</p>
+    </div>
+  </section>
+
+  <section class="block" id="tanya" style="padding-top:0">
+    <div class="wrap" style="padding-top:0">
+      <div class="head"><p class="eyebrow">Tanya jawab</p><h2>Yang sering ditanyakan</h2></div>
+      <div class="faq">
+        <details><summary>Benar-benar gratis?</summary><p>Ya. Tidak ada biaya bulanan, tidak ada batas jumlah barang atau transaksi, dan tidak ada iklan. Kalau Tokopilo membantu usahamu, kamu bisa mendukung pengembangannya lewat Trakteer.</p></details>
+        <details><summary>Perlu internet?</summary><p>Tidak. Berjualan, cetak struk, dan semua catatan jalan tanpa internet. Internet hanya dipakai saat membuka WhatsApp dan memeriksa versi baru.</p></details>
+        <details><summary>Data tokoku disimpan di mana?</summary><p>Di HP atau komputer tempat Tokopilo dipasang. Tidak ada akun dan tidak ada server. Cadangan dibuat otomatis setiap hari, dan bisa kamu simpan ke Google Drive atau flashdisk.</p></details>
+        <details><summary>Printer apa yang bisa dipakai?</summary><p>Printer thermal yang mendukung ESC/POS, yaitu kebanyakan printer struk murah. Lebar kertas 44 sampai 112 mm (paling umum 58 dan 80 mm), atau isi ukuran sendiri. Di HP lewat Bluetooth; di komputer lewat Bluetooth, USB, atau printer Windows.</p></details>
+        <details><summary>Bisa dipakai dua kasir sekaligus?</summary><p>Bisa. Pakai fitur Dua HP: satu HP atau komputer jadi induk, perangkat lain tersambung lewat WiFi yang sama dan memakai data yang sama.</p></details>
+        <details><summary>Bisa pindah dari aplikasi kasir lain?</summary><p>Daftar barang bisa diimpor dari file Excel. Template Excel-nya ada di menu Barang → Impor.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="support">
+    <div class="wrap">
+      <div>
+        <h2 style="font-size:clamp(26px,3.4vw,36px)">Dukung hopilo</h2>
+        <p>Tokopilo dibuat dan dirawat sendiri oleh hopilo. Dukunganmu membantu fitur baru dan perbaikan terus berjalan.</p>
+      </div>
+      <a class="btn primary" href="https://trakteer.id/mohamat-agung-nugroho-xgjd" target="_blank" rel="noopener">Traktir lewat Trakteer</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="hp">
+      <img class="logo-dark" src="img/hopilo-gelap.png" alt="hopilo" width="509" height="205">
+      <img class="logo-light" src="img/hopilo-putih.png" alt="hopilo" width="509" height="205">
+      <span>Tokopilo · aplikasi kasir gratis</span>
+    </div>
+    <nav aria-label="Tautan bawah">
+      <a href="privasi.html">Kebijakan privasi</a>
+      <a href="#unduh">Unduh</a>
+      <a href="https://trakteer.id/mohamat-agung-nugroho-xgjd" target="_blank" rel="noopener">Trakteer</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

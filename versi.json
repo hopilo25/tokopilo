@@ -1,0 +1,13 @@
+{
+  "versi": "1.5.1",
+  "tanggal": "2026-10-25",
+  "catatan": [
+    "Pembeli ganti pesanan? Bisa kembali dari jendela bayar, atau ubah setelah tersimpan",
+    "Jumlah barang bisa diatur langsung saat memilih, tanpa buka keranjang",
+    "Lebar kertas struk 44–112 mm, atau ukuran sendiri",
+    "Getar halus saat disentuh (Android) dan efek transaksi berhasil"
+  ],
+  "windows": "https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo-Setup.exe",
+  "android": "https://github.com/NAMA-AKUN/tokopilo/releases/latest/download/Tokopilo.apk",
+  "halaman": "https://NAMA-AKUN.github.io/tokopilo/"
+}
